@@ -1,5 +1,6 @@
 # SimCLR
-PyTorch implementation of SimCLR: A Simple Framework for Contrastive Learning of Visual Representations
+PyTorch Re-implementation of SimCLR: A Simple Framework for Contrastive Learning of Visual Representations
+- Inspried by https://github.com/sthalles/SimCLR
 
 
 #### Example
@@ -50,3 +51,13 @@ trainer = SimCLRTrainer(encoder, optimizer, loss, device=device)
 encoder.to(device)
 a, b = trainer.run_epoch(dataloder, phase="train", epoch=1)
 ```
+
+
+
+#### Illustration of SimCLR matrix operation
+1. Build similarity matrix($s_{i,j}$): similarity between i vector and j vector by visual encoder (2N, 2N)
+2. Remove diagonal elements in similarity matrix ($s_{i,j}, i=j$)
+3. Split positive samples (key-value) and negtaive samples
+4. Concate above two matrix (The 0-th column is alway 0 in this matrix)
+
+<img src="data/readme/simCLR.png" width=600 height=400 >

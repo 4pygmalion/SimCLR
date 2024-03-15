@@ -14,6 +14,8 @@ class SimCLRLoss(nn.Module):
         See Also:
         https://github.com/sthalles/SimCLR/issues/29#issuecomment-1996853766
 
+        Inspired by https://github.com/sthalles/SimCLR
+
         Args:
             features1 (torch.Tensor): augmented image representation 1 (vector)
             features2 (torch.Tensor): augmented image representation 2 (vector)

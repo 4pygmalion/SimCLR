@@ -28,7 +28,7 @@ class SimCLRLoss(nn.Module):
 
         features = torch.concat([features1, features2], dim=0)  # (2N, D)
         similarity_matrix = torch.exp(
-            torch.matmul(features1, features2.T) / self.temperature
+            torch.matmul(features, features.T) / self.temperature
         )
 
         labels = torch.cat([torch.arange(batch_size) for i in range(self.n_aug)], dim=0)
@@ -38,13 +38,17 @@ class SimCLRLoss(nn.Module):
         labels = labels.float()  # (2N, 2N) shape. Positive: (i,i), (i, i+N)
         mask = torch.eye(2 * batch_size, dtype=torch.bool)  # (2N, 2N)
         mask = mask.to(self.device)
-        labels = labels[~mask].view(labels.shape[0], -1)  # (2N-1, 2N-1) Pos(i, i+N)
+        labels = labels[~mask].view(-1, 1)  # (2N*(2N-1), )
+        similarity_matrix = similarity_matrix[~mask].view(-1, 1)
 
-        positives = similarity_matrix[labels].view(labels.shape[0], -1)  # (2N-1, 1)
-        negatives = similarity_matrix[~labels].view(labels.shape[0], -1)  # (2N-1, 2N-1)
+        positives = similarity_matrix[labels.bool()].view(-1, 1)  # (2N-1, 1)
+        negatives = similarity_matrix[~labels.bool()].view(
+            2 * batch_size, -1
+        )  # (2N-1, 2N-1)
+
         logits = torch.concat(
             [positives, negatives], dim=1
-        )  # (2N-1, 2N), First column is always positive
+        )  # (2N, 2N-1), First column is always positive
 
         labels = torch.zeros(logits.shape[0], dtype=torch.long).to(
             self.device

@@ -42,3 +42,11 @@ dataloder = torch.utils.data.DataLoader(dataset, batch_size=16)
 criterion = SimCLRLoss()
 trainer = SimCLRTrainer(encoder, criterion)
 ```
+
+4. Train your model with SimCLRTrainer
+```python
+optimizer = torch.optim.Adam(encoder.parameters())
+trainer = SimCLRTrainer(encoder, optimizer, loss, device=device)
+encoder.to(device)
+a, b = trainer.run_epoch(dataloder, phase="train", epoch=1)
+```

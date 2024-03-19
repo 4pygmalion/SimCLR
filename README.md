@@ -1,6 +1,6 @@
 # SimCLR
 PyTorch Re-implementation of SimCLR: A Simple Framework for Contrastive Learning of Visual Representations
-- Inspried by https://github.com/sthalles/SimCLR
+
 
 
 #### Example
@@ -61,3 +61,7 @@ a, b = trainer.run_epoch(dataloder, phase="train", epoch=1)
 4. Concate above two matrix (The 0-th column is alway 0 in this matrix)
 
 <img src="data/readme/simCLR.png" width=600 height=400 >
+
+
+#### Reference
+- Inspried by https://github.com/sthalles/SimCLR

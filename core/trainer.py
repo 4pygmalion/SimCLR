@@ -111,8 +111,12 @@ class SimCLRTrainer(BaseTrainer):
         bar = Bar(max=total_step, check_tty=False)
 
         loss_meter = AverageMeter("loss")
-        for i, batch in enumerate(dataloader):
-            xi, xj = batch
+        iterloader = iter(dataloader)
+        for i in range(len(dataloader)):
+            try:
+                xi, xj = next(iterloader)
+            except np.linalg.LinAlgError:
+                continue
 
             if phase == "train":
                 vector_i = self.model(xi)
